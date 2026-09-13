@@ -808,12 +808,14 @@ const CONTENT = {
         '#4E6595', '#374B74', '#243356'
       ],
       cards:[
-        { title:'Adversarialness of Adversarial Attacks',
+        { title:'Adversarial Attacks on Image Classifiers',
+          mid:'photos/adversarial-example.webp',
+          alt:'A photograph of pelicans classified as pelican with 99.99% confidence, plus the perturbation shown at ten times strength, giving an image that looks identical and is classified as lizard with 90.70% confidence.',
           img:IMG_ADV, ratio:0.7759,
           repo:'https://github.com/MrSejr/adversarialAttacks',
           tags:['PyTorch','ResNet-50 · VGG-16','FGSM · PGD · C&W',
                 'Metric design (TCRR)','SSIM / L₂ evaluation','HPC batch jobs (LSF)'],
-          body:`Benchmarking three established gradient-based attacks against two image classifiers: how far each degrades top-1 accuracy, how perceptible the perturbation is, and whether the same examples transfer to a network they were not crafted on. An adversarial attack shifts an image by amounts too small for a person to see, and the model reading it returns the wrong label. The same trick can keep an artist's work out of a training set, or make a road sign unreadable to a car.
+          body:`Three ways to fool an image classifier, measured on how much accuracy they destroy, how visible the damage is, and whether it carries to a network they were not built for. An adversarial attack shifts an image by amounts too small for a person to see, and the model reading it returns the wrong label. The same trick can keep an artist's work out of a training set, or make a road sign unreadable to a car.
 
 The result worth knowing is that imperceptibility and transferability trade off against one another. C&W stays under the just-noticeable threshold at every perturbation budget tested, and it is precisely the attack that fails to transfer: examples crafted on ResNet-50 barely move VGG-16. FGSM, the crudest of the three, crosses architectures with ease. So defending an image against a model you cannot inspect is harder than any single number suggests.
 
@@ -1001,7 +1003,7 @@ const JA = {
       label:'01 / つくっているもの',
       cards: [
         {
-          title:'敵対的攻撃の「敵対性」',
+          title:'画像分類器への敵対的攻撃',
           tags:['PyTorch','ResNet-50 · VGG-16','FGSM · PGD · C&W',
                 '評価指標の設計 (TCRR)','SSIM / L₂ による評価','HPC バッチジョブ (LSF)'],
           body:`勾配に基づく確立された敵対的攻撃を三つ、二つの画像分類器に対して評価した。指標は、top-1 精度をどこまで劣化させるか、その摂動がどれだけ知覚できるか、そして生成した事例が作成に使っていない別のネットワークへ転移するかである。敵対的攻撃とは、人が知覚できる限界を下回る幅で画像をずらし、読み取るモデルに誤ったラベルを返させる手法をいう。同じ仕組みで、絵を学習データから守ることも、道路標識を車から読めなくすることもできる。
