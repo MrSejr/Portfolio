@@ -242,8 +242,10 @@ a{color:inherit}
   display:flex;align-items:baseline;gap:.7rem;
   margin-bottom:.3rem;color:var(--accent);
 }
-.ix-head b{font-weight:400;letter-spacing:.22em}
-.ix-head span{color:var(--ink-faint);letter-spacing:.14em}
+.ix-head b{font-weight:400;font-size:1.05rem;letter-spacing:.22em}
+/* Soft rather than faint: side by side the heading carries the whole
+   weight of saying which half you are in, and at .34 it did not. */
+.ix-head span{color:var(--ink-soft);letter-spacing:.14em}
 
 /* Every entry is open. A hairline runs down the side of each column
    like a timeline, with a node beside each project, so the two
