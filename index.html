@@ -677,6 +677,13 @@ body.dev .ruler{display:block}
   .sheet{width:93vw;max-height:88%}
   .sheet-thumb{width:76px;height:76px}
   .sheet-body{font-size:.98rem}
+  /* At 390px the chips ran to five rows and took 28% of the sheet, so
+     with the head above them the writing opened in a slot at the
+     bottom. The type stays the size it is on a desk; what goes is the
+     air around it, which is what was buying the rows. Five rows become
+     three, and the writing gets a hundred pixels back. */
+  .sheet-tags{gap:5px}
+  .sheet-tags li{letter-spacing:.06em;padding:.3rem .5rem;border-left-width:2px}
 }
 
 @media (prefers-reduced-motion:reduce){
