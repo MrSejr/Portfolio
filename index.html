@@ -800,9 +800,6 @@ const CONTENT = {
     {
       accent:'ai', rail:'Tech',
       label:'01 / What I build',
-      title:'Things made of code',
-      body:'Placeholder paragraph about your engineering work: the stack you like, the kind of problems you take on.',
-      hint:'Drift the cursor sideways · hover to face · click to open',
       /* one flat colour per project, no gradients. The periwinkle
          accent walked from pale to deep, so no two neighbours read
          as the same card. */
@@ -816,7 +813,7 @@ const CONTENT = {
           repo:'https://github.com/MrSejr/adversarialAttacks',
           tags:['PyTorch','ResNet-50 · VGG-16','FGSM · PGD · C&W',
                 'Metric design (TCRR)','SSIM / L₂ evaluation','HPC batch jobs (LSF)'],
-          body:`Benchmarking three established gradient-based attacks against two image classifiers: how far each degrades top-1 accuracy, how perceptible the perturbation is, and whether the same examples transfer to a network they were not crafted on. An adversarial attack shifts an image by amounts below what a person can see, and the model reading it returns the wrong label. The same trick can keep an artist's work out of a training set, or make a road sign unreadable to a car.
+          body:`Benchmarking three established gradient-based attacks against two image classifiers: how far each degrades top-1 accuracy, how perceptible the perturbation is, and whether the same examples transfer to a network they were not crafted on. An adversarial attack shifts an image by amounts too small for a person to see, and the model reading it returns the wrong label. The same trick can keep an artist's work out of a training set, or make a road sign unreadable to a car.
 
 The result worth knowing is that imperceptibility and transferability trade off against one another. C&W stays under the just-noticeable threshold at every perturbation budget tested, and it is precisely the attack that fails to transfer: examples crafted on ResNet-50 barely move VGG-16. FGSM, the crudest of the three, crosses architectures with ease. So defending an image against a model you cannot inspect is harder than any single number suggests.
 
@@ -827,11 +824,11 @@ I implemented the three attacks behind a shared base class and added two metrics
           repo:'https://github.com/MrSejr/melanoma-cnn',
           tags:['PyTorch','CNN from scratch','Class imbalance',
                 'Recall vs specificity','Medical imaging','CUDA training'],
-          body:`Building and training a convolutional network from scratch to sort photographs of skin lesions into benign and malignant, then measuring it against the published performance of dermatologists on the same task. The two mistakes are not worth the same. A false alarm costs a clinic visit; a miss costs more than that, and the work was aimed squarely at the second one.
+          body:`Building and training a convolutional network from scratch to sort photographs of skin lesions into benign and malignant, then measuring it against the published performance of dermatologists on the same task. The two mistakes do not cost the same. A false alarm costs a clinic visit; a miss costs more than that, and the work was aimed squarely at the second one.
 
-The dataset turned out to be the lever. With 46,600 benign images against 7,100 malignant, a network scored on accuracy learns that guessing benign is nearly always safe, which is how you get a model that looks excellent and is not. Retrained on a balanced subset, it finds 90.6% of melanomas for the cost of about one point of accuracy. Choosing that version is a judgement about which error you can live with rather than a number to maximise.
+The dataset turned out to be the lever. With 46,600 benign images against 7,100 malignant, a network scored on accuracy learns that guessing benign is nearly always safe, which is how you get a model that looks excellent and is not. Retrained on a balanced subset, it finds 90.6% of melanomas for the cost of about one point of accuracy. Choosing that version is a judgement about which error you can live with, not an exercise in maximising a number.
 
-The architecture is two convolutional blocks into fully connected layers, trained with Adam and binary cross-entropy over 100 epochs and evaluated through confusion matrices with confidence intervals. Moving training onto the GPU cut the time by a factor of fifteen, which is what made a real hyperparameter search possible. The data is roughly 53,700 clinician-labelled images merged from three public sources.`,
+The architecture is two convolutional blocks feeding fully connected layers, trained with Adam and binary cross-entropy over 100 epochs and evaluated through confusion matrices with confidence intervals. Moving training onto the GPU cut the time by a factor of fifteen, which is what made a real hyperparameter search possible. The data is roughly 53,700 clinician-labelled images merged from three public sources.`,
         },
         { title:'KAIWA-LOG',
           img:IMG_KAI, ratio:1.4,
@@ -840,7 +837,7 @@ The architecture is two convolutional blocks into fully connected layers, traine
                 'Anthropic API (caching, batching)','fugashi / UniDic','Local-first design'],
           body:`A local pipeline that turns a recording of a real Japanese conversation into a verified transcript, a personal language database and one round of written feedback. It transcribes, separates the speakers, asks you to confirm the parts the machine was unsure of, and tracks how much of your Japanese is still shaped by Danish or English. The point is to see the mistakes you make when nobody is marking you.
 
-The design problem is trust rather than accuracy. Speech recognition on Japanese is confident and wrong often enough that feeding it straight into a learning record would quietly teach you your own errors, so uncertain words and known failure patterns route an utterance through a fast human confirm-or-correct loop before it is allowed into the database.
+The design problem is trust rather than accuracy. Speech recognition on Japanese is confident and wrong often enough that feeding it straight into a learning record would quietly teach you your own errors, so uncertain words and known failure patterns send an utterance through a fast human confirm-or-correct loop before it is allowed into the database.
 
 Everything lands as rows in SQLite and every report is a disposable view over it, which keeps the data worth more than the tool. One API call per session, with caching and a batch mode to keep it cheap. The Japanese-specific logic sits in four places on purpose, so pointing the same pipeline at another language means replacing those and nothing else.`,
         },
@@ -849,11 +846,11 @@ Everything lands as rows in SQLite and every report is a disposable view over it
           repo:'https://github.com/MrSejr/Statistical-evaluation-for-artificial-intelligence-and-data',
           tags:['Python','Experiment design',"Cochran's Q · McNemar",
                 'Binomial confidence intervals','LLM evaluation','Prompt protocol'],
-          body:`Testing whether GPT-4, GPT-4o and Microsoft Copilot differ measurably in mathematical and logical ability. Each model answered all 360 problems from nineteen years of the Georg Mohr competition, a Danish schools maths contest, giving 1,080 graded responses, every one marked right or wrong and tagged so the differences could be tested rather than eyeballed.
+          body:`Testing whether GPT-4, GPT-4o and Microsoft Copilot differ measurably in mathematical and logical ability. Each model answered all 360 problems from nineteen years of the Georg Mohr competition, a Danish secondary-school maths competition, giving 1,080 graded responses, every one marked right or wrong and tagged so the differences could be tested rather than eyeballed.
 
 They are closer than they look. GPT-4o scored 26.1%, Copilot 25.8% and GPT-4 22.2%, and no test found a significant gap between any pair, in any slice of the data. All three do beat guessing, and that part is solid. The most useful finding came from a pilot: one question put to each model ten times scored 7, 8 and 3 out of ten, so a single answer is not a measurement, and any benchmark that treats it as one is measuring luck.
 
-The study was designed before anything was collected. Sample size worked out in advance, every problem tagged for format and for whether it needed a figure read, tests picked to suit paired binary outcomes rather than for familiarity, and one fixed prompt for all 1,080 questions so the harness could not flatter anyone.`,
+The study was designed before anything was collected. Sample size settled in advance, every problem tagged for format and for whether it needed a figure read, tests picked to suit paired binary outcomes rather than for familiarity, and one fixed prompt for all 1,080 questions so the harness could not flatter anyone.`,
         },
         { title:'Predicting House Prices from Town Data',
           img:IMG_REG, ratio:1.25,
@@ -861,26 +858,23 @@ The study was designed before anything was collected. Sample size worked out in 
                 'Neural network · KNN','McNemar · paired t-test','Model interpretation'],
           body:`Predicting the median house price of a town from thirteen things known about it, then testing whether the more complicated model is genuinely better or only looks it. The data describes 507 Boston towns by crime rate, air pollution, rooms per dwelling, distance to work and nine others.
 
-Residuals against room count curved rather than scattered, so a squared term went into the linear model, cutting validation error by about 5. It went in there only: a neural network finds that shape by itself and would likely overfit if handed it. Comparison was then done by two-level cross-validation with every model given identical folds, which put the neural network ahead of the tuned linear model by at least 3.32 in mean error with 95% confidence.
+Residuals against room count curved rather than scattered, so a squared term went into the linear model, cutting validation error by about 5. It went into that model only: a neural network finds that shape by itself and would likely overfit if handed it. Comparison was then done by two-level cross-validation with every model given identical folds, which put the neural network ahead of the tuned linear model by at least 3.32 in mean error with 95% confidence.
 
 The same treatment for classification, sorting towns into low, middle and high value. Logistic regression came in at 0.21 mean error against 0.74 for a baseline that always guesses the most common class. Where two models sat within noise of one another I said so instead of declaring a winner, and picked on interpretability, because three readable equations are worth more than a lookup that scores the same.` },
         { title:'UX Design and Testing',
           img:IMG_UX, ratio:1.4,
           tags:['UX research','A/B testing','Timed usability tests',
                 'Wireframing · Figma','Gestalt principles','Scope cutting'],
-          body:`A budgeting app for 18 to 25 year olds, taken from first sketch to tested prototype across three rounds of user testing. It reads bank transactions rather than asking anyone to type them in, builds a budget from what it finds, and answers questions about that budget in plain language.
+          body:`A budgeting app for 18- to 25-year-olds, taken from first sketch to tested prototype across three rounds of user testing. It reads bank transactions rather than asking anyone to type them in, builds a budget from what it finds, and answers questions about that budget in plain language.
 
 The first good move was cutting. A week in, the feedback on the concept was a long feature list around a weak core, so investment tips, gamified tutorials and the rest came out and what remained was budgeting for one narrow age group. Narrowing it is what made room for the parts that ended up carrying the product.
 
-Every round was validated rather than argued about. Two chart designs went to 14 people as an A/B test where they had to complete real tasks instead of stating a preference, and a timed test with 10 more measured how long the main journeys took. Adding an onboarding tutorial took finding a grocery budget from an average of 1 minute 33 seconds down to 20. Logo, slogan and colour were settled the same way, cheaply, before they could become opinions.` }
+Every decision was tested rather than argued about. Two chart designs went to 14 people as an A/B test where they had to complete real tasks instead of stating a preference, and a timed test with 10 more measured how long the main journeys took. Adding an onboarding tutorial took finding a grocery budget from an average of 1 minute 33 seconds down to 20 seconds. Logo, slogan and colour were settled the same way, cheaply, before they could become opinions.` }
       ]
     },
     {
       accent:'shu', rail:'日本 JAPAN',
       label:'02 / The other half',
-      title:'Japan, and how it happened',
-      body:'It started at a Danish folk high school in 2023 and runs through a club I founded in Copenhagen, half a year on exchange at Tokai University, and a village in Akita in February.',
-      hint:'Drift the cursor sideways · hover to face · click to open',
       /* the same walk through the coral half, ending close to the
          seal's own vermillion */
       swatches:[
@@ -896,11 +890,11 @@ Every round was validated rather than argued about. Two chart designs went to 14
           img:'photos/club-poster.webp',
           tags:['Community building','Running a group','Event organising',
                 'Cultural exchange','Founded February 2024'],
-          body:`A weekly club in Copenhagen for people learning Japanese, founded in February 2024 and run by me ever since. It began as somewhere to study together. What I did not plan for is what it turned into: for exchange students whose English was still hard, the club became the way into a social life in Denmark, and it grew into a place where Danes, Japanese and people of other nationalities meet, make friends and trade language and culture in both directions.
+          body:`A weekly club in Copenhagen for people learning Japanese, founded in February 2024 and run by me ever since. It began as somewhere to study together. I had not planned for what it became: for exchange students who still found English hard, the club became the way into a social life in Denmark, and it grew into a place where Danes, Japanese and people from elsewhere meet, make friends and trade language and culture in both directions.
 
-Across five semesters more than a hundred different people have come through it, and the autumn 2026 semester opened with thirteen new members in the first week. We meet weekly, and around that there are excursions to parts of Denmark beyond Copenhagen, barbecues, tea ceremonies and cooking evenings where everyone brings their own kitchen.
+Across five semesters more than a hundred different people have come through it, and the autumn 2026 semester opened with thirteen new members in the first week. We meet weekly, and around that there are excursions to parts of Denmark beyond Copenhagen, barbecues, tea ceremonies and cooking evenings where everyone cooks something from home.
 
-The main thing two and a half years of this has taught me is that wanting to meet people and actually starting something are very different acts, and most people only do the first. Silence in a group is not an absence of interest, it is an absence of anyone going first. Being the one who proposes the date, books the room and sends the message is most of the job, and a group stays alive because somebody keeps doing it.` },
+The main thing two and a half years of this has taught me is that wanting to meet people and actually starting something are very different things, and most people only do the first. Silence in a group is not an absence of interest, it is an absence of anyone going first. Being the one who proposes the date, books the room and sends the message is most of the job, and a group stays alive because somebody keeps doing it.` },
 
         { title:'Namahage at the Sedo Matsuri',
           img:'photos/namahage.webp',
@@ -908,11 +902,11 @@ The main thing two and a half years of this has taught me is that wanting to mee
           alt:'Akita Sakigake newspaper article about Danish namahage performers',
           tags:['Akita','なまはげ / Namahage','秋田弁 / Akita dialect',
                 'Folk tradition','NHK · Akita Shinbun','February 2026'],
-          body:`Taking part in the Namahage Sedo Matsuri in Oga, Akita, in February 2026, in the mask and straw of the namahage. It came out of volunteering. A Dane with years of experience living in Oga asked the volunteers at the Copenhagen sakura festival whether anyone would perform namahage with him at Tokai University's European centre, and I said yes on the grounds that the chance was unlikely to come twice. A year later I was in Akita, among people who turned out to know him, and the conversation ended with a Danish namahage group being coordinated for the festival itself.
+          body:`Taking part in the Namahage Sedo Matsuri in Oga, Akita, in February 2026, in the mask and straw of the namahage. It came out of volunteering. A Dane with years of experience living in Oga asked the volunteers at the Copenhagen sakura festival whether anyone would perform namahage with him at Tokai University's European centre, and I said yes on the grounds that the chance was unlikely to come twice. A year later I was in Akita, among people who turned out to know him, and the conversation ended with a Danish namahage group being put together for the festival itself.
 
-Preparation was at a local school: loosening up how you move, learning enough Akita dialect to stay in character, and learning the roar. The best part of it was watching local children who already inhabited these gods perfectly and needed no instruction at all.
+Preparation was at a local school: loosening up the way you move, learning enough Akita dialect to stay in character, and learning the roar. The best part of it was watching local children who already inhabited these gods perfectly and needed no instruction at all.
 
-On the night you can barely see through the mask, and the job is to be frightening and funny at the same moment. I went through the crowd demanding in Akita dialect to know whether people had been behaving themselves, and asking the school children whether they had done their homework on time, which gets a laugh out of the parents and genuine alarm out of the child, sometimes from the same family. The straw costume is surprisingly warm. Akita Shinbun and NHK Akita covered it, and it carried on to NHK nationally and NHK World.` },
+On the night you can barely see through the mask, and the job is to be frightening and funny at the same moment. I went through the crowd demanding in Akita dialect to know whether people had been behaving themselves, and asking the school children whether they had done their homework on time, which gets a laugh out of the parents and genuine alarm out of the child, sometimes from the same family. The straw costume is surprisingly warm. Akita Shinbun and NHK Akita covered it, and it was picked up by NHK nationally and by NHK World.` },
 
         { title:'The University Calligraphy Club',
           img:'photos/calligraphy.webp',
@@ -921,7 +915,7 @@ On the night you can barely see through the mask, and the job is to be frighteni
                 '建学祭 · UNESCO event','Kanji history'],
           body:`Joining the calligraphy club at Tokai University as its only non-Japanese member, and performing with them twice. We met twice a week, and more than that in the run-up to an event. I suspect it was as unfamiliar for them to have a foreigner this invested in it as it was for me to be there, and after a while neither was remarkable.
 
-Performing means a canvas six metres wide and 1.8 metres tall, big brushes and full-arm strokes, written standing while the canvas is upright rather than flat on the floor and raised afterwards. Gravity does different things to the ink that way, which is an added difficulty when you are still a beginner. The UNESCO exchange event drew around 150 people and the university's 建学祭 around 200, students and their families.
+Performing means a canvas 6 metres wide and 1.8 metres tall, big brushes and full-arm strokes, written standing, with the canvas upright, rather than flat on the floor and raised afterwards. Gravity does different things to the ink that way, which is an added difficulty when you are still a beginner. The UNESCO exchange event drew around 150 people and the university's 建学祭 around 200, students and their families.
 
 The part I remember best is the night before, the clubroom lit late with everyone preparing canvases at once. I still practise, now alongside the history of the characters themselves, since the older forms are what draw me. Recently that has turned into conversations with Japanese calligraphy scholars about the old styles.` },
 
@@ -930,13 +924,13 @@ The part I remember best is the night before, the clubroom lit late with everyon
                 'Ages 8 to 12','Half a year'],
           body:`Living with a family of five for half a year in a house where nobody spoke English. The introduction came through volunteering: a Japanese woman I met at the Copenhagen sakura festival knew the family and put us in touch. Three sons, and no shared language to fall back on, which is the fastest and least comfortable way to learn one.
 
-The father had a great deal to say and two phones to say it with, talking to ChatGPT on the second while the first was still thinking. He is a thoughtful man and my Japanese was nowhere near the size of what he wanted to discuss, so we went past the basics because there was no other way through.
+The father had a great deal to say and two phones to say it with, talking to ChatGPT on the second while the first was still thinking. He is a thoughtful man and my Japanese was nowhere near equal to what he wanted to discuss, so we went past the basics because there was no other way through.
 
 Once a week I volunteered at an after-school club for eight to twelve year olds: talking with them, defusing arguments before they escalated, giving the afternoon some structure by sorting out who went outside to play, and teaching Danish playground games, which meant explaining rules to children in a language I was still assembling. I arrived having studied Japanese only on paper. I left thinking in it rather than translating from English, with a small vocabulary but no step in between.` },
 
         { title:'Sakura Festival, Copenhagen',
           tags:['Volunteering','Copenhagen','2025 · 2026','Sakura Festival'],
-          body:`Volunteering at the Copenhagen sakura festival in 2025 and again in 2026, on the information tent and the stalls. The work itself is ordinary volunteering, but doing it two years running put me inside the festival rather than in front of it: the people who build it, the ones who come back every year, and a community on both sides who are actively invested in keeping the relationship between Denmark and Japan a living one rather than a ceremonial one.
+          body:`Volunteering at the Copenhagen sakura festival in 2025 and again in 2026, on the information tent and the stalls. The work itself is ordinary volunteering, but doing it two years running put me inside the festival rather than in front of it: the people who build it, the ones who come back every year, and a community on both sides who are actively invested in keeping the relationship between Denmark and Japan alive rather than ceremonial.
 
 It is also where nearly everything else on this page started. The woman who introduced me to my host family was there. So was the man who later brought me into the namahage group in Akita. I met the Japanese ambassador at a reception afterwards. None of that was the reason for volunteering, which is rather the point: the two largest things I have done in Japan both came from turning up to help with something small.` },
 
@@ -945,7 +939,7 @@ It is also where nearly everything else on this page started. The woman who intr
                 'Engineering electives','Japanese language'],
           body:`Starting at Bosei folk high school in the spring of 2023, then studying at Tokai University in Japan for the 2025 to 2026 winter semester. Bosei was a gap year decision, taken out of curiosity and a wish for some change, and it is where the first Japanese friendships came from. Tokai has deep Danish roots and a long friendship with Bosei, so going there was following the same line rather than choosing a country at random.
 
-At Tokai I read engineering courses well outside my own field: urban planning, water and wave dynamics, engineering ethics, water ecosystems, sustainability in Japan, and remote sensing. I also took a Japanese language course knowing in advance that it carried no credit, purely because I wanted it. The room was exchange students who study Japanese at their home universities, so the engineer taking it for nothing was the odd one there, and I kept up with it more easily than I had any right to expect.` }
+At Tokai I read engineering courses well outside my own field: urban planning, water and wave dynamics, engineering ethics, water ecosystems, sustainability in Japan, and remote sensing. I also took a Japanese language course knowing in advance that it carried no credit, purely because I wanted it. The room was full of exchange students who study Japanese at their home universities, so the engineer taking it for nothing was the odd one out, and I kept up with it more easily than I had any right to expect.` }
       
       ]
     }
@@ -1005,8 +999,6 @@ const JA = {
     {
       rail:'技術',
       label:'01 / つくっているもの',
-      title:'コードでできているもの',
-      body:'エンジニアリングの仕事についての仮の文章。使っている技術と、取り組む問題の種類。',
       cards: [
         {
           title:'敵対的攻撃の「敵対性」',
@@ -1073,8 +1065,6 @@ const JA = {
     {
       rail:'日本',
       label:'02 / もうひとつの道',
-      title:'日本と、そこに至るまで',
-      body:'2023 年にデンマークのフォルケホイスコーレで始まり、コペンハーゲンで立ち上げたクラブ、東海大学への半年の留学、そして二月の秋田の村へと続いている。',
       cards:[
         {
           title:'日本デンマーククラブの立ち上げ',
