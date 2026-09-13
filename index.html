@@ -339,6 +339,33 @@ a{color:inherit}
 }
 .ix-tags li::before{content:none}          /* tags are not nodes on the line */
 
+/* ── ink by the line, not by the block ────────────────────────
+   The boundary is a line drawn across the screen, so a title or a
+   summary lying across it wants pale ink on the lines above and dark
+   ink on the lines below, inside the one paragraph. A hard-stop
+   gradient clipped to the glyphs does that without splitting the text
+   into spans: the colour stops being a property of an element and
+   becomes a property of where a word happens to sit, which is what
+   makes it survive a rewrap, a resize and a change of language on its
+   own account.
+
+   Guarded, and the class is written by the ink script, so a browser
+   without background-clip gets the per-block switch rather than a
+   column of invisible text. */
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+  .ix-name.split, .ix-lede.split{
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  /* the hover and open states paint colour, which a transparent fill
+     would otherwise swallow */
+  .ix-row:hover .ix-name.split,
+  .ix-row:focus-visible .ix-name.split,
+  .ix-row.open .ix-name.split{-webkit-text-fill-color:var(--hot-now,#FFFFFF)}
+  .ix-row:hover .ix-lede.split,
+  .ix-row:focus-visible .ix-lede.split{-webkit-text-fill-color:var(--ink-now,var(--ink))}
+}
+
 .ix-row:hover .ix-name,
 .ix-row:focus-visible .ix-name,
 .ix-row.open .ix-name{color:var(--hot-now,#FFFFFF)}
@@ -1655,12 +1682,41 @@ document.documentElement.style.setProperty('--tail', FEEL.tail);
     ...document.querySelectorAll('.contact')
   ];
   let entries = [];
+
+  /* The title and the summary are the only two things in the list that
+     wrap, so they are painted by the line instead of as a block. The
+     rest are one line each and the switch above is already exact for
+     them. */
+  let splits = [];
+
   const collect = () => {
     entries = rows().map(li => {
       const g = li.closest('.ix-group');
       return { li, pale:null, accent: ACCENT[g && g.dataset.accent] || ACCENT.ai };
     });
+    splits = [...index.querySelectorAll('.ix-name, .ix-lede')].map(el =>
+      ({ el, y:null, key: el.classList.contains('ix-lede') ? 'soft' : 'ink' }));
   };
+
+  /* Where the boundary crosses this element, measured from its top and
+     snapped to the gap between two of its lines. Left on the raw pixel
+     the stop lands halfway up a row of letters and cuts them in half,
+     which is the one way this trick looks broken. A Range reports one
+     rectangle per line box, which is the only honest source for where
+     the lines actually are once the text has wrapped. */
+  function stop(el, r, edge){
+    if (edge <= r.top)    return 0;
+    if (edge >= r.bottom) return r.height;
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    for (const line of range.getClientRects()){
+      if (edge > line.top && edge < line.bottom){
+        const near = edge - line.top < line.bottom - edge ? line.top : line.bottom;
+        return near - r.top;
+      }
+    }
+    return edge - r.top;            /* between two lines already */
+  }
 
   /* One rule, and nothing layered on top of it: an entry is pale
      while it is above the line and near-black once it is below.
@@ -1687,6 +1743,20 @@ document.documentElement.style.setProperty('--tail', FEEL.tail);
       st.setProperty('--faint-now', rgba(P.faint));
       st.setProperty('--hot-now',   rgba(P.hot));
       st.setProperty('--accent-now',rgba(pale ? e.accent.lo : e.accent.hi));
+    }
+
+    for (const s of splits){
+      const r = s.el.getBoundingClientRect();
+      if (!r.height) continue;                          /* not laid out yet */
+      const y = Math.round(stop(s.el, r, edge));
+      if (y === s.y) continue;                          /* nothing moved */
+      s.y = y;
+      const up = rgba(LIGHT[s.key]), down = rgba(DARK[s.key]);
+      s.el.style.backgroundImage =
+        `linear-gradient(to bottom, ${up} 0, ${up} ${y}px, ${down} ${y}px, ${down} 100%)`;
+      /* the class is what makes the fill transparent, so it goes on only
+         once there is a gradient underneath to show through it */
+      s.el.classList.add('split');
     }
   }
 
