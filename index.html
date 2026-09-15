@@ -556,6 +556,21 @@ a{color:inherit}
 }
 body.dev .ruler{display:block}
 
+/* A font switcher, on the same ?dev flag as the ruler. Click to walk
+   the candidates over the real page with the real words in it, rather
+   than judging a typeface off a specimen. The choice is remembered, so
+   a reload keeps whichever one you were looking at. Delete this block,
+   its markup and its script once a font is chosen. */
+.fontpick{
+  display:none;position:fixed;left:8px;bottom:8px;z-index:99;
+  background:#0B0C10;color:#FFFFFF;border:0;cursor:pointer;
+  padding:.5rem .7rem;text-align:left;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.7rem;
+  line-height:1.5;letter-spacing:.04em;
+}
+.fontpick b{display:block;font-weight:400;color:#F0A79A}
+body.dev .fontpick{display:block}
+
 /* contact inside the sheet: the links are the content, so they get
    room to be tapped rather than being a line of small print */
 .sheet-body .c-link{
@@ -731,6 +746,7 @@ body.dev .ruler{display:block}
 
   <!-- only visible with ?dev on the address -->
   <div class="ruler" id="ruler" aria-hidden="true"></div>
+  <button class="fontpick" id="fontpick" type="button"></button>
 
   <!-- lang="ja" is deliberate and does not follow the site language.
        Font fallback is language-aware, and the maths glyphs the seal
@@ -993,6 +1009,62 @@ if (/(^|[?&])dev(=|&|$)/.test(location.search)) {
   const tick  = () => { ruler.textContent = innerWidth + ' × ' + innerHeight; };
   addEventListener('resize', tick, { passive:true });
   tick();
+
+  /* ── the font switcher ────────────────────────────────────────
+     Each entry is a display face, and a few also swap the mono voice,
+     since the pairing is what decides the feeling rather than either
+     one alone. Google serves the Japanese families in unicode-range
+     slices, so a Latin reader pulls a fraction of the whole.
+
+     null in `g` means a system stack, which costs no request. */
+  const FONTS = [
+    { n:'Current — system Mincho', g:null,
+      d:"'Hiragino Mincho ProN','Yu Mincho','Songti SC',Georgia,serif" },
+    { n:'Shippori Mincho', g:'Shippori+Mincho:wght@400;500',
+      d:"'Shippori Mincho',serif" },
+    { n:'Shippori Mincho B1 — ink pooling', g:'Shippori+Mincho+B1:wght@400;500',
+      d:"'Shippori Mincho B1',serif" },
+    { n:'Zen Old Mincho', g:'Zen+Old+Mincho:wght@400;700',
+      d:"'Zen Old Mincho',serif" },
+    { n:'Noto Serif JP', g:'Noto+Serif+JP:wght@400;500',
+      d:"'Noto Serif JP',serif" },
+    { n:'BIZ UDMincho — high legibility', g:'BIZ+UDMincho:wght@400;700',
+      d:"'BIZ UDMincho',serif" },
+    { n:'Zen Antique — retro signage', g:'Zen+Antique',
+      d:"'Zen Antique',serif" },
+    { n:'Klee One — brush, textbook', g:'Klee+One:wght@400;600',
+      d:"'Klee One',cursive" },
+    { n:'EB Garamond + JP fallback', g:'EB+Garamond:wght@400;500',
+      d:"'EB Garamond','Hiragino Mincho ProN','Yu Mincho',serif" },
+    { n:'Cormorant + JP fallback', g:'Cormorant+Garamond:wght@400;500',
+      d:"'Cormorant Garamond','Hiragino Mincho ProN','Yu Mincho',serif" },
+    { n:'Zen Old Mincho + Zen Kaku labels',
+      g:'Zen+Old+Mincho:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;500',
+      d:"'Zen Old Mincho',serif", m:"'Zen Kaku Gothic New',system-ui,sans-serif" },
+    { n:'Shippori + IBM Plex Sans labels',
+      g:'Shippori+Mincho:wght@400;500&family=IBM+Plex+Sans:wght@400;500',
+      d:"'Shippori Mincho',serif", m:"'IBM Plex Sans',system-ui,sans-serif" }
+  ];
+  const SYS_MONO = getComputedStyle(document.documentElement)
+    .getPropertyValue('--mono').trim();
+  const pick = document.getElementById('fontpick');
+  const sheet = document.createElement('link');
+  sheet.rel = 'stylesheet';
+  document.head.appendChild(sheet);
+
+  let fi = +(localStorage.getItem('fontpick') || 0) % FONTS.length;
+  const paint = () => {
+    const f = FONTS[fi], r = document.documentElement.style;
+    /* display:block on the font so a half-loaded face never shows the
+       previous one and reads as a result */
+    sheet.href = f.g ? 'https://fonts.googleapis.com/css2?family=' + f.g + '&display=block' : '';
+    r.setProperty('--display', f.d);
+    r.setProperty('--mono', f.m || SYS_MONO);
+    pick.innerHTML = '<b>' + (fi + 1) + ' / ' + FONTS.length + '  ' + f.n + '</b>click to cycle';
+    localStorage.setItem('fontpick', fi);
+  };
+  pick.addEventListener('click', () => { fi = (fi + 1) % FONTS.length; paint(); });
+  paint();
 }
 
 /* ═══════════════════════════════════════════════════════════════
