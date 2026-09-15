@@ -58,8 +58,10 @@ a{color:inherit}
 .mono{
   font-family:var(--mono);
   font-size:.79rem;
-  letter-spacing:.16em;
-  text-transform:uppercase;
+  /* Sentence case, and tracking that is not shouting. Uppercase
+     monospace with .16em on a dark gradient is the stock spacecraft
+     interface, which is not what this sky is meant to be. */
+  letter-spacing:.04em;
   font-weight:400;
 }
 
@@ -237,7 +239,7 @@ a{color:inherit}
   display:flex;align-items:baseline;gap:.7rem;
   margin-bottom:.3rem;color:var(--accent);
 }
-.ix-head b{font-weight:400;font-size:1.05rem;letter-spacing:.22em}
+.ix-head b{font-weight:400;font-size:1.05rem;letter-spacing:.06em}
 /* Soft rather than faint: side by side the heading carries the whole
    weight of saying which half you are in, and at .34 it did not. */
 .ix-head span{color:var(--ink-soft);letter-spacing:.14em}
@@ -329,8 +331,8 @@ a{color:inherit}
    correctly on both the night and the daylight, so a tag needs no
    help from a shadow or a backdrop to be legible. */
 .ix-tags li{
-  font-family:var(--mono);font-size:.73rem;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--soft-now, var(--ink-soft));
+  font-family:var(--mono);font-size:.73rem;letter-spacing:.03em;
+  color:var(--soft-now, var(--ink-soft));
   padding:.26rem .5rem;
   background:rgba(124,128,144,.2);
   border:1px solid rgba(124,128,144,.58);
@@ -444,8 +446,7 @@ a{color:inherit}
 }
 .sheet-tags:empty{display:none}
 .sheet-tags li{
-  font-family:var(--mono);font-size:.78rem;letter-spacing:.11em;
-  text-transform:uppercase;
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;
   padding:.5rem .78rem;
   background:#ECE8DF;color:#3F4350;
   border-left:3px solid var(--accent);
@@ -683,7 +684,7 @@ body.dev .ruler{display:block}
      air around it, which is what was buying the rows. Five rows become
      three, and the writing gets a hundred pixels back. */
   .sheet-tags{gap:5px}
-  .sheet-tags li{letter-spacing:.06em;padding:.3rem .5rem;border-left-width:2px}
+  .sheet-tags li{padding:.3rem .5rem;border-left-width:2px}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -939,8 +940,8 @@ Performing means a canvas 6 metres wide and 1.8 metres tall, big brushes and ful
 The part I remember best is the night before, the clubroom lit late with everyone preparing canvases at once. I still practise, now alongside the history of the characters themselves, since the older forms are what draw me. Recently that has turned into conversations with Japanese calligraphy scholars about the old styles.` },
 
         { title:'Half a Year with a Japanese Family',
-          tags:['Homestay','Everyday Japanese','Volunteering with children',
-                'Ages 8 to 12','Half a year'],
+          tags:['Homestay','Everyday Japanese','After-school club',
+                'Working above my level'],
           body:`I lived with a family of five for half a year, in a house that ran in Japanese. A woman I met volunteering at the Copenhagen sakura festival knew them and put us in touch. The oldest son was studying English hard enough to spar with me in it; with everyone else there was nothing shared to fall back on.
 
 Nobody slowed down for me, and I think that is the part that did the work. A family at dinner talks about what it wants to talk about at the speed it talks, and a guest who follows half of it either keeps up or sits quietly for six months, so I spent most of that half year working well above my own level. I got used to guessing at the shape of sentences I could not actually parse, to asking for the single word that would unlock the rest of one, and to being wrong often enough that it stopped being embarrassing. The after-school club I helped at once a week, for eight to twelve year olds, was harder in a useful way, because children tell you plainly when you have not made sense.
@@ -1114,7 +1115,7 @@ const JA = {
         },
         {
           title:'日本の家族と過ごした半年',
-          tags:['ホームステイ','生活の日本語','子どもとの活動','8 歳から 12 歳','半年'],
+          tags:['ホームステイ','生活の日本語','放課後クラブ','自分の水準より上で'],
           body:`日本語で回っている家で、五人家族と半年暮らした。紹介はボランティアからで、コペンハーゲンの桜まつりで知り合った日本人女性がこの家族を知っていて、つないでくれた。長男は英語を熱心に勉強していて、私はその練習相手になれた。ただ、ほかの家族とのあいだに逃げ場になる共通語はなかった。
 
 誰も私に合わせて速度を落とさなかった。効いたのはそこだと思う。食卓の家族は、話したいことを話したい速さで話す。半分しか分からない居候は、ついていくか、半年のあいだ黙って座っているかのどちらかである。だから私はその半年の大半を、自分の水準よりかなり上のところで過ごした。まともに解析できない文の輪郭を推測することにも、その一文を解くための単語を一つだけ尋ねることにも、恥ずかしくなくなるほど何度も間違えることにも慣れた。週に一度手伝った 8 歳から 12 歳の放課後クラブは、役に立つ意味でもっと難しかった。子どもは、通じていないときにはっきりそう言うからである。
